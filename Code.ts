@@ -7,6 +7,11 @@ function onOpen() {
   .addToUi();
 }
 
+const textStyle = {
+  [DocumentApp.Attribute.FONT_FAMILY]: 'Poppins',
+  [DocumentApp.Attribute.FONT_SIZE]: 30,
+};
+
 if (!String.prototype.endsWith) {
 	String.prototype.endsWith = function(search, this_len) {
 		if (this_len === undefined || this_len > this.length) {
@@ -86,7 +91,9 @@ function isCellForScoring(tableCell: GoogleAppsScript.Document.TableCell) {
 function calculateAndUpdateTableScore(table: GoogleAppsScript.Document.Table) {
   const averageOutcomeScore = averageScores(getAllScoresInTable(table));
   revealAllScores(table);
-  return table.getCell(table.getNumRows() - 1, 1).setText(`${averageOutcomeScore}/4`);
+  return table.getCell(table.getNumRows() - 1, 1)
+  .setText(`${averageOutcomeScore}/4`)
+  .setAttributes(textStyle);
 }
 
 // Entry point for calculations
