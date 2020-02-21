@@ -21,7 +21,7 @@ function getAverageScores(scores: number[]): number {
 }
 
 function getAllScoresInTable(table: GoogleAppsScript.Document.Table): number[] {
-  return [...Array(table.getNumRows())].reduce((scores, _, idx) => {
+  return Array(table.getNumRows()).fill().reduce((scores, _, idx) => {
     const row = table.getRow(idx);
     if (ensureRowIsForScoring(row)) {
       return [...scores, ...getScoresForRow(row)];
@@ -32,18 +32,18 @@ function getAllScoresInTable(table: GoogleAppsScript.Document.Table): number[] {
 }
 
 function getScoresForRow(tableRow: GoogleAppsScript.Document.TableRow): number[] {
-  return [...Array(tableRow.getNumCells())]
+  return Array(tableRow.getNumCells()).fill(0)
     .map((_, idx) => tableRow.getCell(idx))
     .filter(tableCell => isCellForScoring(tableCell))
     .map(tableCell => parseInt(tableCell.getText()));
 }
 
 function revealTableScores(table: GoogleAppsScript.Document.Table) {
-  return [...Array(table.getNumRows())]
+  return Array(table.getNumRows()).fill(0)
     .map((_, idx) => table.getRow(idx))
     .filter(row => ensureRowIsForScoring(row))
     .forEach(scoringRow => {
-        [...Array(scoringRow.getNumCells())]
+        Array(scoringRow.getNumCells()).fill(0)
         .map((_, idx) => scoringRow.getCell(idx))
         .filter(cell => isCellForScoring)
         .forEach(cell => cell.setBackgroundColor(null));
@@ -51,7 +51,7 @@ function revealTableScores(table: GoogleAppsScript.Document.Table) {
 }
 
 function ensureRowIsForScoring(tableRow: GoogleAppsScript.Document.TableRow): boolean {
-  return [...Array(tableRow.getNumCells())].every((_, idx) => {
+  return Array(tableRow.getNumCells()).fill(0).every((_, idx) => {
     const tableCell = tableRow.getCell(idx);
     if (idx % 2 === 1) {
       return isCellForScoring(tableCell);
